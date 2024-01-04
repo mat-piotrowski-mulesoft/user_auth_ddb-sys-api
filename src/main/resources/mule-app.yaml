@@ -1,0 +1,10 @@
+api:
+  layer: "API_LAYER -> S - system, P - process, E - experience"
+  error:
+    code: "API_ERROR_CODE"
+
+# Properties used with pagination module
+pagination:
+  limit:
+    default: "PAGINATION_LIMIT_DEFAULT_VALUE"
+    max: "PAGINATION_LIMIT_MAXIMUM_VALUE"
