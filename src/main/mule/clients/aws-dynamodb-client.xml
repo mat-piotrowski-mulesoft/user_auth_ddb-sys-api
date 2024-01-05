@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:dynamodb="http://www.mulesoft.org/schema/mule/dynamodb" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/dynamodb http://www.mulesoft.org/schema/mule/dynamodb/current/mule-dynamodb.xsd">
+	<flow name="aws_dd:check-if-user-exists-flow" doc:id="8bc70f40-e962-4cf7-a93e-958ce9ab1a77" >
+		<ee:transform doc:name="Set key" doc:id="de11fd2f-0c89-4a03-85e8-64d4dc210411" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="awsGetKey" ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	email_address: {
+		S: vars.emailAddress
+	}
+}]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<dynamodb:get-item doc:name="Get email_address and username" doc:id="893f3ec8-0de0-4137-93a3-415c528dfe4b" config-ref="Amazon_DynamoDB_Configuration" tableName="${aws.tables.auth}">
+			<dynamodb:key ><![CDATA[#[vars.awsGetKey]]]></dynamodb:key>
+			<dynamodb:attributes-to-gets >
+				<dynamodb:attributes-to-get value="email_address" />
+				<dynamodb:attributes-to-get value="username" />
+			</dynamodb:attributes-to-gets>
+		</dynamodb:get-item>
+		<ee:transform doc:name="Set isUserExists" doc:id="b626e6af-f26f-4640-b874-8636e3713e86" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="isUserExists" ><![CDATA[%dw 2.0
+output application/java
+---
+not isEmpty(payload.item)]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+	</flow>
+	<flow name="aws_dd:add_user_to_db-flow" doc:id="8a1b5bf8-29de-4ae1-aa28-7aa40ec1ffee" >
+		<ee:transform doc:name="Set input" doc:id="0d4fd5fd-e1f5-43cd-b5d1-95054e3df9bb" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="awsInput" ><![CDATA[%dw 2.0
+output application/json
+
+var timestamp = now() as Number
+---
+{
+	email_address: {
+		S: vars.emailAddress
+	},
+	username: {
+		S: vars.username
+	},
+	password: {
+		S: vars.hashedPassword
+	},
+	phone_number: {
+		S: vars.phoneNumber default ""
+	},
+	rt: {
+		S: vars.tokens.refreshToken
+	},
+	created_at: {
+		N: timestamp as String
+	},
+	updated_at: {
+		N: timestamp as String
+	}
+}]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<dynamodb:put-item tableName="${aws.tables.auth}" doc:name="Add user to db" doc:id="49e9530a-ff15-4498-a2ae-b96c0770cdb7" config-ref="Amazon_DynamoDB_Configuration">
+			<dynamodb:item ><![CDATA[#[vars.awsInput]]]></dynamodb:item>
+		</dynamodb:put-item>
+	</flow>
+</mule>

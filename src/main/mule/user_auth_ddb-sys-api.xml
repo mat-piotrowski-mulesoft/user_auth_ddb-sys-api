@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd ">
+    
+    <flow name="user_auth_ddb-sys-api-main">
+        <http:listener config-ref="httpListenerConfig" path="/api/v1/auth/credentials/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body><![CDATA[#[payload]]]></http:body>
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:router config-ref="api-config" />
+		<error-handler ref="api-exception-strategy" />
+    </flow>
+    <flow name="post:\refresh:application\json:api-config">
+		<ee:transform doc:name="Transform Message">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  access_token: "Bearer uwHjXnkfdv5mfzjh3WPuVXF2EoB3Ml7EV3xb7eQa44LgwRIYp58HiTxlJz4eZR4idNiqZqwVepC05CXqujr4rd6U3ZU5M9sKmr2Jqw5vp5uDmNfWxTa4uXK51Nulkv40UzUFIXYx71hGeTScaVUzsT74VG0pp2Y6a9DHnj2378LAGLuuqkp63P0YCKfs2k3DaRs0dvKF8H2XToCgo5cgPVV1B3KpN58WF74I62WXGDXGYqv7Y2o4tDOQahknYPs",
+  refresh_token: "Bearer uwHjXnkfdv5mfzjh3WPuVXF2EoB3Ml7EV3xb7eQa44LgwRIYp58HiTxlJz4eZR4idNiqZqwVepC05CXqujr4rd6U3ZU5M9sKmr2Jqw5vp5uDmNfWxTa4uXK51Nulkv40UzUFIXYx71hGeTScaVUzsT74VG0pp2Y6a9DHnj2378LAGLuuqkp63P0YCKfs2k3DaRs0dvKF8H2XToCgo5cgPVV1B3KpN58WF74I62WXGDXGYqv7Y2o4tDOQahknYPs"
+} as Object {encoding: "UTF-8", mediaType: "application/json"}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="post:\signin:application\json:api-config">
+		<ee:transform doc:name="Transform Message">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  access_token: "Bearer uwHjXnkfdv5mfzjh3WPuVXF2EoB3Ml7EV3xb7eQa44LgwRIYp58HiTxlJz4eZR4idNiqZqwVepC05CXqujr4rd6U3ZU5M9sKmr2Jqw5vp5uDmNfWxTa4uXK51Nulkv40UzUFIXYx71hGeTScaVUzsT74VG0pp2Y6a9DHnj2378LAGLuuqkp63P0YCKfs2k3DaRs0dvKF8H2XToCgo5cgPVV1B3KpN58WF74I62WXGDXGYqv7Y2o4tDOQahknYPs",
+  refresh_token: "Bearer uwHjXnkfdv5mfzjh3WPuVXF2EoB3Ml7EV3xb7eQa44LgwRIYp58HiTxlJz4eZR4idNiqZqwVepC05CXqujr4rd6U3ZU5M9sKmr2Jqw5vp5uDmNfWxTa4uXK51Nulkv40UzUFIXYx71hGeTScaVUzsT74VG0pp2Y6a9DHnj2378LAGLuuqkp63P0YCKfs2k3DaRs0dvKF8H2XToCgo5cgPVV1B3KpN58WF74I62WXGDXGYqv7Y2o4tDOQahknYPs"
+} as Object {encoding: "UTF-8", mediaType: "application/json"}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="post:\signout:api-config">
+		<ee:transform doc:name="Transform Message">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  links: vars.paginationLinks
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="post:\signup:application\json:api-config">
+		<flow-ref doc:name="Ref to post-signup-handler-subflow" doc:id="a7abe825-133c-4932-bb89-f875b9607898" name="post-signup-handler-subflow"/>
+    </flow>
+</mule>

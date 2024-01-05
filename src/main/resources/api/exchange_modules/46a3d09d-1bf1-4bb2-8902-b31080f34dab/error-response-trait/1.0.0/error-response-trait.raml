@@ -1,0 +1,29 @@
+#%RAML 1.0 Trait
+
+responses:
+  400:
+    body:
+      application/json:
+        type: !include types/error_response_type.raml
+        example: !include examples/error_400_example.raml
+  401:
+    body:
+      application/json:
+        type: !include types/error_response_type.raml
+        example: !include examples/error_401_example.raml
+  403:
+    body:
+      application/json:
+        type: !include types/error_response_type.raml
+        example: !include examples/error_403_example.raml
+  404:
+    body:
+      application/json:
+        type: !include types/error_response_type.raml
+        example: !include examples/error_404_example.raml
+  500:
+    body:
+      application/json:
+        type: !include types/error_response_type.raml
+        example: !include examples/error_500_example.raml
+         

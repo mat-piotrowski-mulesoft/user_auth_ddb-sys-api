@@ -2,12 +2,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.itsnooge</groupId>
-	<artifactId>mule-template-api</artifactId>
+	<groupId>com.mycompany</groupId>
+	<artifactId>user_auth_ddb-sys-api</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
 	<packaging>mule-application</packaging>
 
-	<name>mule-template-api</name>
+	<name>user_auth_ddb-sys-api</name>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -15,7 +15,6 @@
 
 		<app.runtime>4.5.1</app.runtime>
 		<mule.maven.plugin.version>4.0.0</mule.maven.plugin.version>
-		
 		<common-standard-library.version>1.0.0</common-standard-library.version>
 	</properties>
 
@@ -54,11 +53,28 @@
 			<version>1.9.2</version>
 			<classifier>mule-plugin</classifier>
 		</dependency>
-		
 		<dependency>
 			<groupId>com.itsnooge</groupId>
 			<artifactId>common-standard-library</artifactId>
 			<version>${common-standard-library.version}</version>
+			<classifier>mule-plugin</classifier>
+		</dependency>
+		<dependency>
+			<groupId>org.mule.modules</groupId>
+			<artifactId>mule-validation-module</artifactId>
+			<version>2.0.5</version>
+			<classifier>mule-plugin</classifier>
+		</dependency>
+		<dependency>
+			<groupId>com.mulesoft.connectors</groupId>
+			<artifactId>mule-amazon-dynamodb-connector</artifactId>
+			<version>1.5.1</version>
+			<classifier>mule-plugin</classifier>
+		</dependency>
+		<dependency>
+			<groupId>com.mulesoft.modules</groupId>
+			<artifactId>mule-secure-configuration-property-module</artifactId>
+			<version>1.2.6</version>
 			<classifier>mule-plugin</classifier>
 		</dependency>
 	</dependencies>
@@ -89,10 +105,10 @@
 			</snapshots>
 		</pluginRepository>
 		<pluginRepository>
-	    	<id>github</id>
-	     	<name>GitHub mat-piotrowski Apache Maven Packages</name>
-	     	<url>https://maven.pkg.github.com/mat-piotrowski-mulesoft/maven-repository</url>
-	   </pluginRepository>
+			<id>github</id>
+			<name>GitHub mat-piotrowski Apache Maven Packages</name>
+			<url>https://maven.pkg.github.com/mat-piotrowski-mulesoft/maven-repository</url>
+		</pluginRepository>
 	</pluginRepositories>
 
 </project>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:dynamodb="http://www.mulesoft.org/schema/mule/dynamodb" xmlns:validation="http://www.mulesoft.org/schema/mule/validation"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mule/validation/current/mule-validation.xsd" >
+
+	<sub-flow name="post-signup-handler-subflow" doc:id="273bf2ea-9d24-4c40-9311-8462eda22f60" >
+		<ee:transform doc:name="Save payload" doc:id="a8d72e91-73ac-476d-9380-736c8dc37b8a" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="username" ><![CDATA[%dw 2.0
+output application/java
+---
+payload.username]]></ee:set-variable>
+				<ee:set-variable variableName="password" ><![CDATA[%dw 2.0
+output application/java
+
+---
+payload.password]]></ee:set-variable>
+				<ee:set-variable variableName="emailAddress" ><![CDATA[%dw 2.0
+output application/java
+---
+payload.email_address]]></ee:set-variable>
+				<ee:set-variable variableName="phoneNumber" ><![CDATA[%dw 2.0
+output application/java
+---
+payload.phone_number replace (/\+|-/) with ""]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="Ref to signup-input-validation-subflow" doc:id="4830d2c7-155a-4d90-9553-f4c036a0ae98" name="signup-input-validation-subflow"/>
+		<ee:transform doc:name="Hash password" doc:id="788f8509-0e4f-4ab6-a7d2-56b31758fbf9" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="hashedPassword" ><![CDATA[%dw 2.0
+output application/java
+
+import hashPassword from dw::auth
+---
+hashPassword(vars.password)]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="Ref to aws_dd:check-if-user-exists-flow" doc:id="058cabb5-0b13-4fcd-a4ed-6b224001b580" name="aws_dd:check-if-user-exists-flow"/>
+		<validation:is-false doc:name="Is user exists in DB" doc:id="03b1cc93-c44f-4890-b917-f4968bd1c25d" expression="#[vars.isUserExists]" message="DDBAUTH-S-00005">
+			<error-mapping targetType="APP:EXCEPTION_HANDLING" />
+		</validation:is-false>
+		<flow-ref doc:name="Ref to jwt-generator-orchestrator-subflow" doc:id="6a2dbc31-498a-42fa-9b0c-749c1b949547" name="jwt-generator-orchestrator-subflow" />
+		<flow-ref doc:name="Ref to aws_dd:add_user_to_db-flow" doc:id="a72331a4-4e11-46b1-8d08-6f59e2289ed7" name="aws_dd:add_user_to_db-flow"/>
+		<ee:transform doc:name="Set response" doc:id="0cf1b7fa-e1f1-4076-baf2-3de88735a16b" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+
+---
+{
+	access_token: "Bearer " ++ vars.tokens.accessToken,
+	refresh_token: "Bearer " ++ vars.tokens.refreshToken
+}
+
+]]></ee:set-payload>
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="httpStatus" ><![CDATA[%dw 2.0
+output application/java
+---
+201]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+	</sub-flow>
+	<sub-flow name="signup-input-validation-subflow" doc:id="365faf29-414d-4e69-821d-f4a5587a26f6" >
+		<validation:is-email doc:name="Input email validation" doc:id="0adf36ca-d4fc-4252-9b1b-914bfe5d46c0" email="#[vars.emailAddress]" message="DDBAUTH-S-00001">
+			<error-mapping targetType="APP:EXCEPTION_HANDLING" />
+		</validation:is-email>
+		<validation:is-true doc:name="Input phone number validation" doc:id="ae55d695-2c5f-46ac-91f9-3de5c2b47d7a" expression="#[isEmpty(vars.phoneNumber) or (vars.phoneNumber matches /^([\d]{1,5})?(\s[0-9]{6,13})$/)]" message="DDBAUTH-S-00002">
+			<error-mapping targetType="APP:EXCEPTION_HANDLING" />
+		</validation:is-true>
+		<validation:matches-regex doc:name="Input username validation" doc:id="5a181901-9174-4c98-8452-9b220fd057c6" value="#[vars.username]" regex="#[/^(?=.*[a-zA-Z])[a-zA-Z0-9_-]{3,20}$/]" message="DDBAUTH-S-00003">
+			<error-mapping targetType="APP:EXCEPTION_HANDLING" />
+		</validation:matches-regex>
+		<validation:matches-regex doc:name="Input password validation" doc:id="a248e78d-a7f0-4322-aa35-33b9d1c319a0" value="#[vars.password]" regex="#[/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/]" message="DDBAUTH-S-00004">
+			<error-mapping targetType="APP:EXCEPTION_HANDLING" />
+		</validation:matches-regex>
+	</sub-flow>
+</mule>

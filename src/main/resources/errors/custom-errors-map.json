@@ -1,1 +1,32 @@
-{}
+{
+  "DDBAUTH-S-00001": {
+    "code": "DDBAUTH-S-00001",
+    "message": "Bad Request",
+    "description": "Incorrect format of the email address",
+    "responseCode": 400
+  },
+  "DDBAUTH-S-00002": {
+    "code": "DDBAUTH-S-00002",
+    "message": "Bad Request",
+    "description": "Incorrect format of the phone number, it should have country code, space and the phone number",
+    "responseCode": 400
+  },
+   "DDBAUTH-S-00003": {
+    "code": "DDBAUTH-S-00003",
+    "message": "Bad Request",
+    "description": "Incorrect username format, it should have only letters, numbers, underscores, dashes (at least one letter) and its length should be between 3 and 20 characters",
+    "responseCode": 400
+  },
+   "DDBAUTH-S-00004": {
+    "code": "DDBAUTH-S-00004",
+    "message": "Bad Request",
+    "description": "Incorrect password format, it should have at least 8 characters, at least one lowercase letter, one uppercase letter and one number",
+    "responseCode": 400
+  },
+    "DDBAUTH-S-00005": {
+    "code": "DDBAUTH-S-00005",
+    "message": "Bad Request",
+    "description": "User with provided email address is already exists",
+    "responseCode": 400
+  }
+}

@@ -1,3 +1,4 @@
 {
-  "minMuleVersion": "4.5.0"
+  "minMuleVersion": "4.5.0",
+  "secureProperties": ["jwt.secret", "aws.secretKey", "aws.accesKey", "password.secret"]
 }

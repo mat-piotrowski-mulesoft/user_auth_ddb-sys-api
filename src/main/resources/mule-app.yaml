@@ -1,10 +1,26 @@
 api:
-  layer: "API_LAYER -> S - system, P - process, E - experience"
+  layer: "S"
   error:
-    code: "API_ERROR_CODE"
+    code: "DDBAUTH"
 
-# Properties used with pagination module
-pagination:
-  limit:
-    default: "PAGINATION_LIMIT_DEFAULT_VALUE"
-    max: "PAGINATION_LIMIT_MAXIMUM_VALUE"
+jwt:
+  alg: 
+    tokenHeader: "HS256"
+    dwlScript: "HmacSHA256"
+  typ: "JWT"
+  kid: "mule_pokebattle_rs256"
+  accessToken:
+    type: "access_token"
+    duration: "3600" # 1 hour
+  refreshToken:
+    type: "refresh_token"
+    duration: "604800" # 7 days
+    
+password:
+  alg:
+    dwlScript: "HmacSHA256"
+    
+aws:
+  region: "EU_CENTRAL_1"
+  tables:
+    auth: "DEV-poke_battles-auth-table"

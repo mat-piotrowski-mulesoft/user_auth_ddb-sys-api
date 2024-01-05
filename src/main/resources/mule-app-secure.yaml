@@ -1,0 +1,9 @@
+jwt:
+  secret: "![X79FpePLDsNL2ooovjId/OvYB+6wtH3DwX+QPXNKSIgwy/a7dy8r49qBVEKSBUWOno3T6BWQPcZGJ/fvwYZdX0YluEQnoqHI]"
+  
+aws:
+  accessKey: "![B2BdPHfUMRJbNLi1s4quHLfhGgKrjl5Z]"
+  secretKey: "![NmYXhEkbfGk1drjoVbR2r+oMV4QgWibkASxbnz0iic9PE5wWVQWV/ieAgohier6k]"
+
+password:
+  secret: "![nf3orukacqYYKHk2z/mFlesBLssqkNBDMZYPyfmPx2ipEOmUZkHCYfDCs6fUczqz9MZ+3Biqvx1reu2LCjMyZIPJonV9zuIh]"
