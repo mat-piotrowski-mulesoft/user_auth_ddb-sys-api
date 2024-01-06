@@ -24,7 +24,7 @@ http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/m
 	</secure-properties:config>
 	
 	<tls:context name="TLS_Context" doc:name="TLS Context" doc:id="dcdbbd3e-176e-41c6-83e1-fb72f7b52f0b" >
-		<tls:key-store type="jks" path="${jks.path}" alias="${jks.alias}" keyPassword="${jks.keyPassword}" password="${jks.password}"/>
+		<tls:key-store type="jks" path="${jks.path}" alias="${jks.alias}" keyPassword="${secure::jks.keyPassword}" password="${secure::jks.password}"/>
 	</tls:context>
 	
 	<import doc:name="Import error-handling" doc:id="117397e4-1675-49b5-9fd2-ce46b256d4f8" file="error-handling.xml" />

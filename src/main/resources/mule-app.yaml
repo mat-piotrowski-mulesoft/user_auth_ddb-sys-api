@@ -4,6 +4,10 @@ api:
     code: "DDBAUTH"
   instanceId: "19217525"
 
+jks:
+  path: "tls/itsnooge-cms-keys.jks"
+  alias: "mule_itsnooge_cms_rs256"
+
 jwt:
   alg: 
     tokenHeader: "HS256"
