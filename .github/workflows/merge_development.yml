@@ -25,9 +25,11 @@ jobs:
         distribution: 'zulu'
         java-version: 8
     - name: Build with Maven
-      run: mvn -B package --file pom.xml -DskipMunitTests
+      run: mvn -B package --settings .maven/settings.xml --file pom.xml -DskipMunitTests
       env:
         GITHUB_TOKEN: ${{ secrets.MAVEN_REPO_GITHUB_TOKEN }}
+        nexus_username: ${{ secrets.anypoint_platform_username }}
+        nexus_password: ${{ secrets.anypoint_platform_password }}
     - name: Stamp artifact file name with commit hash
       run: |
         artifactName1=$(ls target/*.jar | head -1)
