@@ -112,6 +112,11 @@
 			<url>https://repository.mulesoft.org/releases/</url>
 			<layout>default</layout>
 		</repository>
+		<repository>
+			<id>github</id>
+			<name>GitHub mat-piotrowski Apache Maven Packages</name>
+			<url>https://maven.pkg.github.com/mat-piotrowski-mulesoft/maven-repository</url>
+		</repository>
 	</repositories>
 
 	<pluginRepositories>
