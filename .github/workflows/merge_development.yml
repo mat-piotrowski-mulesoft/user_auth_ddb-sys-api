@@ -25,7 +25,7 @@ jobs:
         distribution: 'zulu'
         java-version: 8
     - name: Build with Maven
-      run: mvn -B package --settings .maven/settings.xml --file pom.xml -DskipMunitTests -Dapp.name=user-auth-ddb-sys-api
+      run: mvn -B package --settings .maven/settings.xml --file pom.xml -DskipMunitTests
       env:
         GITHUB_TOKEN: ${{ secrets.MAVEN_REPO_GITHUB_TOKEN }}
         nexus_username: ${{ secrets.anypoint_platform_username }}
@@ -66,6 +66,7 @@ jobs:
       run: |
         artifactName=$(ls *.jar | head -1)
         mvn deploy -DskipMunitTests -DmuleDeploy \
+         -Dapp.name="user-auth-ddb-sys-api"
          -Danypoint.env="DEV" \
          -Danypoint.username="$USERNAME" \
          -Danypoint.password="$PASSWORD" \
