@@ -24,9 +24,15 @@
     "responseCode": 400
   },
     "DDBAUTH-S-00005": {
-    "code": "DDBAUTH-S-00005",
-    "message": "Bad Request",
-    "description": "User with provided email address is already exists",
-    "responseCode": 400
+     "code": "DDBAUTH-S-00005",
+     "message": "Bad Request",
+     "description": "User with provided email address is already exists",
+     "responseCode": 400
+  },
+   	"DDBAUTH-S-00006": {
+     "code": "DDBAUTH-S-00006",
+     "message": "Internal Server Error",
+     "description": "There was problem when trying to sign out, try again",
+     "responseCode": 500
   }
 }

@@ -41,16 +41,7 @@ output application/json
         </ee:transform>
     </flow>
     <flow name="post:\signout:api-config">
-		<ee:transform doc:name="Transform Message">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-  links: vars.paginationLinks
-}]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
+		<flow-ref doc:name="Ref to post-signout-handler-subflow" doc:id="027c6ef5-0c69-4128-8cf8-57646c7ee5c1" name="post-signout-handler-subflow"/>
     </flow>
     <flow name="post:\signup:application\json:api-config">
 		<flow-ref doc:name="Ref to post-signup-handler-subflow" doc:id="a7abe825-133c-4932-bb89-f875b9607898" name="post-signup-handler-subflow"/>

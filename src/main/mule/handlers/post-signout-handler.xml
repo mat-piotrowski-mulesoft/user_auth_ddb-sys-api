@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:validation="http://www.mulesoft.org/schema/mule/validation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mule/validation/current/mule-validation.xsd">
+	<sub-flow name="post-signout-handler-subflow" doc:id="50ee9f6e-0c7b-4e51-bf4b-a0c97f8b9797" >
+		<ee:transform doc:name="Save user email address" doc:id="2432fd4e-5021-419e-ba97-0412b902d375" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="emailAddress" ><![CDATA[%dw 2.0
+output application/java
+---
+payload.email_address]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<validation:is-email doc:name="Input email validation" doc:id="ca1ceb70-3d5f-4218-b3a3-571c0e96712d" email="#[vars.emailAddress]" message="DDBAUTH-S-00001">
+			<error-mapping targetType="APP:EXCEPTION_HANDLING" />
+		</validation:is-email>
+		<flow-ref doc:name="Ref to aws_dd:delete_user_rt-flow" doc:id="b9abd095-f778-48c8-92d3-1f88c40da496" name="aws_dd:delete_user_rt-flow"/>
+		<validation:is-blank-string doc:name="Refresk token validation" doc:id="cd44aeb1-d4a8-4845-a6e5-d83f305c6402" value="#[vars.refreshToken]" message="DDBAUTH-S-00006">
+			<error-mapping targetType="APP:EXCEPTION_HANDLING" />
+		</validation:is-blank-string>
+		<ee:transform doc:name="Set response" doc:id="9cc6b191-d85d-466d-8a03-c9d1f10b0e77" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+null]]></ee:set-payload>
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="httpStatus" ><![CDATA[%dw 2.0
+output application/java
+---
+204]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+	</sub-flow>
+</mule>

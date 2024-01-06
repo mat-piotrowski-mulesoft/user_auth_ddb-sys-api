@@ -15,6 +15,7 @@ types:
   signin_credentials: !include types/signin_credentials_type.raml
   auth_response: !include types/succesfull_auth_response_type.raml
   refresh_token: !include types/refresh_token_body_type.raml
+  signout_body: !include types/signout_body_type.raml
 
 /signup:
   post:
@@ -53,6 +54,10 @@ types:
     description: Remove refresh token from the database
     is:
       - errors
+    body:
+      application/json:
+        type: signout_body
+        example: !include examples/signout_body_example.raml
     responses:
       204:
 
