@@ -39,12 +39,12 @@ import hashPassword from dw::auth
 hashPassword(vars.password)]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
-		<flow-ref doc:name="Ref to aws_dd:check-if-user-exists-flow" doc:id="058cabb5-0b13-4fcd-a4ed-6b224001b580" name="aws_dd:check-if-user-exists-flow"/>
+		<flow-ref doc:name="Ref to aws_dd:check-if-user-exists-subflow" doc:id="058cabb5-0b13-4fcd-a4ed-6b224001b580" name="aws_dd:check-if-user-exists-subflow"/>
 		<validation:is-false doc:name="Is user exists in DB" doc:id="03b1cc93-c44f-4890-b917-f4968bd1c25d" expression="#[vars.isUserExists]" message="DDBAUTH-S-00005">
 			<error-mapping targetType="APP:EXCEPTION_HANDLING" />
 		</validation:is-false>
 		<flow-ref doc:name="Ref to jwt-generator-orchestrator-subflow" doc:id="6a2dbc31-498a-42fa-9b0c-749c1b949547" name="jwt-generator-orchestrator-subflow" />
-		<flow-ref doc:name="Ref to aws_dd:add_user_to_db-flow" doc:id="a72331a4-4e11-46b1-8d08-6f59e2289ed7" name="aws_dd:add_user_to_db-flow"/>
+		<flow-ref doc:name="Ref to aws_dd:add_user_to_db-subflow" doc:id="a72331a4-4e11-46b1-8d08-6f59e2289ed7" name="aws_dd:add_user_to_db-subflow"/>
 		<ee:transform doc:name="Set response" doc:id="0cf1b7fa-e1f1-4076-baf2-3de88735a16b" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0

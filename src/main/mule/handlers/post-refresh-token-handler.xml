@@ -20,7 +20,7 @@ output application/java
 payload.email_address]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
-		<flow-ref doc:name="Ref to aws_dd:get-user-refresh-token-flow" doc:id="edbe544e-468c-4d24-ad4e-d658158b2caa" name="aws_dd:get-user-refresh-token-flow"/>
+		<flow-ref doc:name="Ref to aws_dd:get-user-refresh-token-subflow" doc:id="edbe544e-468c-4d24-ad4e-d658158b2caa" name="aws_dd:get-user-refresh-token-subflow"/>
 		<validation:is-not-blank-string doc:name="Is token not empty string" doc:id="c60eefda-d4cf-462e-aa5a-7cd3ac7692e9" value="#[vars.receivedRefreshToken]" message="DDBAUTH-S-00003">
 			<error-mapping targetType="APP:EXCEPTION_HANDLING" />
 		</validation:is-not-blank-string>
@@ -37,7 +37,7 @@ output application/java
 vars.tokens.refreshToken]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
-		<flow-ref doc:name="Ref to aws_dd:update_user_rt-flow" doc:id="504be968-6369-45c6-9ad5-01dfe2899ce0" name="aws_dd:update_user_rt-flow"/>
+		<flow-ref doc:name="Ref to aws_dd:update_user_rt-subflow" doc:id="504be968-6369-45c6-9ad5-01dfe2899ce0" name="aws_dd:update_user_rt-subflow"/>
 		<validation:is-true doc:name="Refresh token validation" doc:id="adf6fd17-f228-4ba4-a833-52639ded7c27" expression="#[vars.refreshToken == vars.newRefreshToken]" message="DDBAUTH-S-00012">
 			<error-mapping targetType="APP:EXCEPTION_HANDLING" />
 		</validation:is-true>

@@ -29,7 +29,7 @@ output application/java
 ""]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
-		<flow-ref doc:name="Ref to aws_dd:update_user_rt-flow" doc:id="b9abd095-f778-48c8-92d3-1f88c40da496" name="aws_dd:update_user_rt-flow"/>
+		<flow-ref doc:name="Ref to aws_dd:update_user_rt-subflow" doc:id="b9abd095-f778-48c8-92d3-1f88c40da496" name="aws_dd:update_user_rt-subflow"/>
 		<validation:is-true doc:name="Refresh token validation" doc:id="408e2975-60c3-44bd-8aef-9398ad2c182e" expression="#[vars.refreshToken == vars.newRefreshToken]" message="DDBAUTH-S-00006">
 			<error-mapping targetType="APP:EXCEPTION_HANDLING" />
 		</validation:is-true>
