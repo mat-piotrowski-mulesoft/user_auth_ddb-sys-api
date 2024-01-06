@@ -1,0 +1,22 @@
+name: Remove SNAPSHOT from version on master branch
+
+on:
+  pull_request:
+    types: closed
+    branches:
+      - master
+    
+jobs:
+  remove-snapshot:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Remove SNAPSHOT from pom.xml
+        run: mvn versions:set -DremoveSnapshot=true -DgenerateBackupPoms=false
+      - name: Commit changes
+        run: |
+          git config --global user.email "github-actions@github.io"
+          git config --global user.name "github-actions"
+          git commit -am "Remove SNAPSHOT from pom.xml"
+          git push
