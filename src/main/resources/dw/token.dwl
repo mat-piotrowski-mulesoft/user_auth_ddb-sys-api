@@ -26,11 +26,17 @@ fun generateJWT(iss, sub, tokenType, duration) = do {
 	 exp: timestamp + duration
 	}
 	
-	var header = base64encodeURL(write(tokenHeader, "application/json")) // Convert to Stringified JSON
-	var payload = base64encodeURL(write(tokenPayload, "application/json")) // Convert to Stringified JSON
+	var header = base64encodeURL(write(tokenHeader, "application/json"))
+	var payload = base64encodeURL(write(tokenPayload, "application/json"))
  	var signature = base64encodeURL(HMACBinary(secret as Binary, (base64encodeURL(header) ++ "." ++ base64encodeURL(payload)) as Binary, Mule::p("jwt.alg.dwlScript")))
 	---
 	header ++ "." ++ payload ++ "." ++ signature
+}
+
+fun decodeJWT(token) = do {
+	var payload = (token splitBy ".")[1]
+	---
+	read(fromBase64(payload),"application/json")
 }
 
  

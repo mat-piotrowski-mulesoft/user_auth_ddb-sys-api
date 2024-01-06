@@ -53,7 +53,7 @@ vars.tokens.refreshToken]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
 		<flow-ref doc:name="Ref to aws_dd:update_user_rt-flow" doc:id="31f8a2ae-e935-4f95-a355-36fe424dbd13" name="aws_dd:update_user_rt-flow"/>
-		<validation:is-true doc:name="Refresh token validation" doc:id="9ae5691f-57e1-4e3f-9f22-3fd8c1b32f3f" expression="#[vars.refreshToken == vars.tokens.refreshToken]" message="DDBAUTH-S-00009">
+		<validation:is-true doc:name="Refresh token validation" doc:id="9ae5691f-57e1-4e3f-9f22-3fd8c1b32f3f" expression="#[vars.refreshToken == vars.newRefreshToken]" message="DDBAUTH-S-00009">
 			<error-mapping targetType="APP:EXCEPTION_HANDLING" />
 		</validation:is-true>
 		<ee:transform doc:name="Set response" doc:id="efaf0a80-5a33-4a5a-bfd0-7bd8aa17e083" >

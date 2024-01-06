@@ -11,10 +11,6 @@ http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mu
 			<ee:message >
 			</ee:message>
 			<ee:variables >
-				<ee:set-variable variableName="username" ><![CDATA[%dw 2.0
-output application/java
----
-payload.username]]></ee:set-variable>
 				<ee:set-variable variableName="password" ><![CDATA[%dw 2.0
 output application/java
 
@@ -77,9 +73,6 @@ output application/java
 		<validation:is-true doc:name="Input phone number validation" doc:id="ae55d695-2c5f-46ac-91f9-3de5c2b47d7a" expression="#[isEmpty(vars.phoneNumber) or (vars.phoneNumber matches /^([\d]{1,5})?(\s[0-9]{6,13})$/)]" message="DDBAUTH-S-00002">
 			<error-mapping targetType="APP:EXCEPTION_HANDLING" />
 		</validation:is-true>
-		<validation:matches-regex doc:name="Input username validation" doc:id="5a181901-9174-4c98-8452-9b220fd057c6" value="#[vars.username]" regex="#[/^(?=.*[a-zA-Z])[a-zA-Z0-9_-]{3,20}$/]" message="DDBAUTH-S-00003">
-			<error-mapping targetType="APP:EXCEPTION_HANDLING" />
-		</validation:matches-regex>
 		<validation:matches-regex doc:name="Input password validation" doc:id="a248e78d-a7f0-4322-aa35-33b9d1c319a0" value="#[vars.password]" regex="#[/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/]" message="DDBAUTH-S-00004">
 			<error-mapping targetType="APP:EXCEPTION_HANDLING" />
 		</validation:matches-regex>

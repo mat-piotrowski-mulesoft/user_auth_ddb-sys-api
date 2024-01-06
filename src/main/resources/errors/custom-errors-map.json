@@ -13,9 +13,9 @@
   },
    "DDBAUTH-S-00003": {
     "code": "DDBAUTH-S-00003",
-    "message": "Bad Request",
-    "description": "Incorrect username format, it should have only letters, numbers, underscores, dashes (at least one letter) and its length should be between 3 and 20 characters",
-    "responseCode": 400
+    "message": "Unauthorizied",
+    "description": "User is signed out, it is necessary to sign in again",
+    "responseCode": 401
   },
    "DDBAUTH-S-00004": {
     "code": "DDBAUTH-S-00004",
@@ -51,6 +51,24 @@
      "code": "DDBAUTH-S-00009",
      "message": "Internal Server Error",
      "description": "There was problem when trying to sign in, try again",
+     "responseCode": 500
+  },
+    "DDBAUTH-S-00010": {
+     "code": "DDBAUTH-S-00010",
+     "message": "Unauthorizied",
+     "description": "Token doesn't have a valid signature",
+     "responseCode": 401
+  },
+  "DDBAUTH-S-00011": {
+     "code": "DDBAUTH-S-00011",
+     "message": "Unauthorizied",
+     "description": "Token doesn't match to the stored one",
+     "responseCode": 401
+  },
+  "DDBAUTH-S-00012": {
+     "code": "DDBAUTH-S-00012",
+     "message": "Internal Server Error",
+     "description": "There was problem when trying to refresh token, try again",
      "responseCode": 500
   }
 }
