@@ -19,7 +19,17 @@ payload.email_address]]></ee:set-variable>
 		<validation:is-email doc:name="Input email validation" doc:id="ca1ceb70-3d5f-4218-b3a3-571c0e96712d" email="#[vars.emailAddress]" message="DDBAUTH-S-00001">
 			<error-mapping targetType="APP:EXCEPTION_HANDLING" />
 		</validation:is-email>
-		<flow-ref doc:name="Ref to aws_dd:delete_user_rt-flow" doc:id="b9abd095-f778-48c8-92d3-1f88c40da496" name="aws_dd:delete_user_rt-flow"/>
+		<ee:transform doc:name="Set new rt" doc:id="97562cb0-f03e-4ccd-b56e-51872a4feb32" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="newRefreshToken" ><![CDATA[%dw 2.0
+output application/java
+---
+""]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="Ref to aws_dd:update_user_rt-flow" doc:id="b9abd095-f778-48c8-92d3-1f88c40da496" name="aws_dd:update_user_rt-flow"/>
 		<validation:is-blank-string doc:name="Refresk token validation" doc:id="cd44aeb1-d4a8-4845-a6e5-d83f305c6402" value="#[vars.refreshToken]" message="DDBAUTH-S-00006">
 			<error-mapping targetType="APP:EXCEPTION_HANDLING" />
 		</validation:is-blank-string>

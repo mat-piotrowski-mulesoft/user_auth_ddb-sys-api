@@ -34,5 +34,23 @@
      "message": "Internal Server Error",
      "description": "There was problem when trying to sign out, try again",
      "responseCode": 500
+  },
+  "DDBAUTH-S-00007": {
+     "code": "DDBAUTH-S-00007",
+     "message": "Bad Request",
+     "description": "User with provided email address is not exists",
+     "responseCode": 400
+  },
+  "DDBAUTH-S-00008": {
+     "code": "DDBAUTH-S-00008",
+     "message": "Bad Request",
+     "description": "Password doesn't match",
+     "responseCode": 400
+  },
+  "DDBAUTH-S-00009": {
+     "code": "DDBAUTH-S-00009",
+     "message": "Internal Server Error",
+     "description": "There was problem when trying to sign in, try again",
+     "responseCode": 500
   }
 }
