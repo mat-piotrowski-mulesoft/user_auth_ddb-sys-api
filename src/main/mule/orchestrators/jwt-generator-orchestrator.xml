@@ -5,7 +5,6 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
 	<sub-flow name="jwt-generator-orchestrator-subflow" doc:id="75ce36c6-0ee5-4fac-a2c5-d288961b68cd" >
-		<logger level="INFO" doc:name="Logger" doc:id="2caf9465-99b2-4822-b5e8-fdd73f072dd7" message="#[attributes.headers['x-itsnooge-token-iss']]"/>
 		<ee:transform doc:name="Genetrate JWT" doc:id="c074e97a-36ca-4290-8feb-9940844187af" >
 			<ee:message >
 			</ee:message>
