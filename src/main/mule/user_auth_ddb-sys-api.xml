@@ -11,7 +11,31 @@
                 <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
             </http:error-response>
         </http:listener>
-        <apikit:router config-ref="api-config" />
+        <ee:transform doc:name="Save headers" doc:id="a1276e84-ca87-4c15-be72-e2bad4292a64" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="_headers" ><![CDATA[%dw 2.0
+output application/java
+---
+{
+	iss: attributes.headers['x-itsnooge-token-iss']
+}]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<apikit:router config-ref="api-config" />
 		<error-handler ref="api-exception-strategy" />
+    </flow>
+    <flow name="post:\refresh:application\json:api-config">
+		<flow-ref doc:name="Ref to post-refresh-token-handler-subflow" doc:id="4e081106-b4c8-4411-8f6e-23fc3af48839" name="post-refresh-token-handler-subflow"/>
+    </flow>
+    <flow name="post:\signin:application\json:api-config">
+		<flow-ref doc:name="Ref to post-signin-handler-subflow" doc:id="6bbe6f6d-0b29-419b-bcfc-3b24fd62349e" name="post-signin-handler-subflow"/>
+    </flow>
+    <flow name="post:\signout:api-config">
+		<flow-ref doc:name="Ref to post-signout-handler-subflow" doc:id="027c6ef5-0c69-4128-8cf8-57646c7ee5c1" name="post-signout-handler-subflow"/>
+    </flow>
+    <flow name="post:\signup:application\json:api-config">
+		<flow-ref doc:name="Ref to post-signup-handler-subflow" doc:id="a7abe825-133c-4932-bb89-f875b9607898" name="post-signup-handler-subflow"/>
     </flow>
 </mule>

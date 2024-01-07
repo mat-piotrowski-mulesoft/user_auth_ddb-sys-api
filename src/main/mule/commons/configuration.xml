@@ -1,21 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit"
-	xmlns:http="http://www.mulesoft.org/schema/mule/http"
-	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="
+<mule xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway"
+	xmlns:tls="http://www.mulesoft.org/schema/mule/tls"
+	xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties" xmlns:dynamodb="http://www.mulesoft.org/schema/mule/dynamodb"
+	xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
 http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd 
-http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/dynamodb http://www.mulesoft.org/schema/mule/dynamodb/current/mule-dynamodb.xsd
+http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/schema/mule/secure-properties/current/mule-secure-properties.xsd
+http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd
+http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd">
 
 	<http:listener-config name="httpListenerConfig">
-        <http:listener-connection host="0.0.0.0" port="8081" />
+        <http:listener-connection host="${https.host}" port="${https.port}" readTimeout="${https.timeout}" tlsContext="TLS_Context" protocol="HTTPS"/>
     </http:listener-config>
-    <apikit:config name="api-config" api="mule-template-api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
-	<configuration-properties doc:name="Configuration properties" doc:id="f1776c91-2d4d-430b-bd53-bd5be45e9c85" file="mule-app.yaml" />
+    <apikit:config name="api-config" api="user_auth_ddb-sys-api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+	<api-gateway:autodiscovery apiId="${api.instanceId}" ignoreBasePath="true" doc:name="API Autodiscovery" doc:id="f26b3e61-7eb6-4aad-833c-b6c81c2d2b91" flowRef="user_auth_ddb-sys-api-main" />
 
-	<import doc:name="Import error-handling" doc:id="abb60953-fa0f-49f8-9a64-0da099c2647f" file="error-handling.xml" />
-	<!-- PAGINATION MODULE -->
-	<import doc:name="Import pagination" doc:id="7f3bb676-8fa0-4877-aea3-c575c546fb10" file="pagination.xml" />
+	<configuration-properties doc:name="Configuration properties" doc:id="f1776c91-2d4d-430b-bd53-bd5be45e9c85" file="mule-app.yaml" />
+	<secure-properties:config name="Secure_Properties_Config" doc:name="Secure Properties Config" doc:id="0cf3aefa-5894-46a8-9c9d-e37b70ee86d5" file="mule-app-secure.yaml" key="${vault.key}" >
+		<secure-properties:encrypt algorithm="Blowfish" />
+	</secure-properties:config>
 	
+	<tls:context name="TLS_Context" doc:name="TLS Context" doc:id="dcdbbd3e-176e-41c6-83e1-fb72f7b52f0b" >
+		<tls:key-store type="jks" path="${jks.path}" alias="${jks.alias}" keyPassword="${secure::jks.keyPassword}" password="${secure::jks.password}"/>
+	</tls:context>
+	
+	<import doc:name="Import error-handling" doc:id="117397e4-1675-49b5-9fd2-ce46b256d4f8" file="error-handling.xml" />
+	
+	<dynamodb:config name="Amazon_DynamoDB_Configuration" doc:name="Amazon DynamoDB Configuration" doc:id="2b5a6c0c-ee16-4f6c-9485-3530955f19c5" >
+		<dynamodb:basic-connection accessKey="${secure::aws.accessKey}" secretKey="${secure::aws.secretKey}" region="${aws.region}" />
+	</dynamodb:config>
+
 </mule>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<sub-flow name="jwt-generator-orchestrator-subflow" doc:id="75ce36c6-0ee5-4fac-a2c5-d288961b68cd" >
+		<ee:transform doc:name="Genetrate JWT" doc:id="c074e97a-36ca-4290-8feb-9940844187af" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="tokens" ><![CDATA[%dw 2.0
+output application/java
+
+import generateJWT from dw::token
+
+var sub = vars.emailAddress
+var iss = vars.'_headers'.iss
+
+var accessTokenDuration = Mule::p("jwt.accessToken.duration") as Number
+var accessTokenType = Mule::p("jwt.accessToken.type")
+var refreshTokenDuration = Mule::p("jwt.refreshToken.duration") as Number
+var refreshTokenType = Mule::p("jwt.refreshToken.type")
+---
+{
+	accessToken: generateJWT(iss, sub, accessTokenType, accessTokenDuration),
+	refreshToken: generateJWT(iss, sub, refreshTokenType, refreshTokenDuration)
+}]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+	</sub-flow>
+	<sub-flow name="jwt-generator-decode-token-subflow" doc:id="cec20e74-e451-4ffb-8dbc-c9b722fde540" >
+		<ee:transform doc:name="Decode JWT" doc:id="be8840a0-0647-47ff-b58d-c08ae69d757d" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="decodedToken" ><![CDATA[%dw 2.0
+output application/java
+
+import decodeJWT from dw::token
+---
+decodeJWT(vars.token)]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+	</sub-flow>
+</mule>

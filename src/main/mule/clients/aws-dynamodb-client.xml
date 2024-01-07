@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:dynamodb="http://www.mulesoft.org/schema/mule/dynamodb" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/dynamodb http://www.mulesoft.org/schema/mule/dynamodb/current/mule-dynamodb.xsd">
+	<sub-flow name="aws_dd:check-if-user-exists-subflow" doc:id="8bc70f40-e962-4cf7-a93e-958ce9ab1a77" >
+		<ee:transform doc:name="Set key" doc:id="de11fd2f-0c89-4a03-85e8-64d4dc210411" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="awsGetKey" ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	email_address: {
+		S: vars.emailAddress
+	}
+}]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<dynamodb:get-item doc:name="Get email address" doc:id="893f3ec8-0de0-4137-93a3-415c528dfe4b" config-ref="Amazon_DynamoDB_Configuration" tableName="${aws.tables.auth}">
+			<dynamodb:key ><![CDATA[#[vars.awsGetKey]]]></dynamodb:key>
+			<dynamodb:attributes-to-gets >
+				<dynamodb:attributes-to-get value="email_address" />
+			</dynamodb:attributes-to-gets>
+		</dynamodb:get-item>
+		<ee:transform doc:name="Set isUserExists" doc:id="b626e6af-f26f-4640-b874-8636e3713e86" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="isUserExists" ><![CDATA[%dw 2.0
+output application/java
+---
+not isEmpty(payload.item)]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+	</sub-flow>
+	<sub-flow name="aws_dd:add_user_to_db-subflow" doc:id="8a1b5bf8-29de-4ae1-aa28-7aa40ec1ffee" >
+		<ee:transform doc:name="Set input" doc:id="0d4fd5fd-e1f5-43cd-b5d1-95054e3df9bb" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="awsInput" ><![CDATA[%dw 2.0
+output application/json
+
+var timestamp = now() as Number
+---
+{
+	email_address: {
+		S: vars.emailAddress
+	},
+	password: {
+		S: vars.hashedPassword
+	},
+	phone_number: {
+		S: vars.phoneNumber default ""
+	},
+	rt: {
+		S: vars.tokens.refreshToken
+	},
+	created_at: {
+		N: timestamp as String
+	},
+	updated_at: {
+		N: timestamp as String
+	}
+}]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<dynamodb:put-item tableName="${aws.tables.auth}" doc:name="Add user to db" doc:id="49e9530a-ff15-4498-a2ae-b96c0770cdb7" config-ref="Amazon_DynamoDB_Configuration">
+			<dynamodb:item ><![CDATA[#[vars.awsInput]]]></dynamodb:item>
+		</dynamodb:put-item>
+	</sub-flow>
+	<sub-flow name="aws_dd:update_user_rt-subflow" doc:id="d2d82cf9-b3cd-48b7-aef1-2729a48565ad" >
+		<ee:transform doc:name="Set key" doc:id="301aa651-8adb-4892-b553-ddd35fa79b8d">
+			<ee:message />
+			<ee:variables>
+				<ee:set-variable variableName="awsUpdateKey" ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	email_address: {
+		S: vars.emailAddress
+	}
+}]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<dynamodb:update-item doc:name="Update refresh token" doc:id="45ec78fc-011a-4cc2-a9a8-9aa529f7c5b8" config-ref="Amazon_DynamoDB_Configuration" tableName="${aws.tables.auth}" returnValues="UPDATED_NEW">
+			<dynamodb:key ><![CDATA[#[vars.awsUpdateKey]]]></dynamodb:key>
+			<dynamodb:attribute-updates >
+				<dynamodb:attribute-update key="rt">
+					<dynamodb:attribute-value-update action="PUT" value='#[{"S": vars.newRefreshToken}]' />
+				</dynamodb:attribute-update>
+			</dynamodb:attribute-updates>
+		</dynamodb:update-item>
+		<ee:transform doc:name="Save new refresh token" doc:id="f723b8f6-609e-46d3-a270-1ab9f33aa9f0" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="refreshToken" ><![CDATA[%dw 2.0
+output application/java
+---
+payload.attributes.rt.S]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+	</sub-flow>
+	<sub-flow name="aws_dd:get-user-password-subflow" doc:id="e75ebab9-b805-40cd-a3d0-88fff5b83933" >
+		<ee:transform doc:name="Set key" doc:id="4e61dbcb-4c88-4499-9d2e-9589f6ae97bd" >
+			<ee:message />
+			<ee:variables >
+				<ee:set-variable variableName="awsGetKey" ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	email_address: {
+		S: vars.emailAddress
+	}
+}]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<dynamodb:get-item tableName="${aws.tables.auth}" doc:name="Get password" doc:id="4e06b543-19e1-4a12-8109-b678a29aa582" config-ref="Amazon_DynamoDB_Configuration" >
+			<dynamodb:key ><![CDATA[#[vars.awsGetKey]]]></dynamodb:key>
+			<dynamodb:attributes-to-gets >
+				<dynamodb:attributes-to-get value="password" />
+			</dynamodb:attributes-to-gets>
+		</dynamodb:get-item>
+		<ee:transform doc:name="Save received password" doc:id="557bc3f9-142b-49ed-b5fe-a4c0a824a51f" >
+			<ee:message />
+			<ee:variables >
+				<ee:set-variable variableName="receivedPassword" ><![CDATA[%dw 2.0
+output application/java
+---
+payload.item.password.S]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+	</sub-flow>
+	<sub-flow name="aws_dd:get-user-refresh-token-subflow" doc:id="6084b5e8-faf0-47a8-b54b-d0628b038e5e" >
+		<ee:transform doc:name="Set key" doc:id="d9bdfd80-6d01-4c48-ba97-273c6b3e28d4" >
+			<ee:message />
+			<ee:variables >
+				<ee:set-variable variableName="awsGetKey" ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	email_address: {
+		S: vars.emailAddress
+	}
+}]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<dynamodb:get-item tableName="${aws.tables.auth}" doc:name="Get refresh token" doc:id="74363274-4a24-42aa-a29e-bf83d28607cd" config-ref="Amazon_DynamoDB_Configuration" >
+			<dynamodb:key ><![CDATA[#[vars.awsGetKey]]]></dynamodb:key>
+			<dynamodb:attributes-to-gets >
+				<dynamodb:attributes-to-get value="rt" />
+			</dynamodb:attributes-to-gets>
+		</dynamodb:get-item>
+		<ee:transform doc:name="Save received token" doc:id="37299c2f-1428-48ca-b920-77cd7e532d39" >
+			<ee:message />
+			<ee:variables >
+				<ee:set-variable variableName="receivedRefreshToken" ><![CDATA[%dw 2.0
+output application/java
+---
+payload.item.rt.S]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+	</sub-flow>
+</mule>

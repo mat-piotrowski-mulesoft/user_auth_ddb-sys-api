@@ -3,19 +3,18 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.itsnooge</groupId>
-	<artifactId>mule-template-api</artifactId>
+	<artifactId>user_auth_ddb-sys-api</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
 	<packaging>mule-application</packaging>
 
-	<name>mule-template-api</name>
+	<name>user_auth_ddb-sys-api</name>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-		<app.runtime>4.5.1</app.runtime>
+		<app.runtime>4.5</app.runtime>
 		<mule.maven.plugin.version>4.0.0</mule.maven.plugin.version>
-		
 		<common-standard-library.version>1.0.0</common-standard-library.version>
 	</properties>
 
@@ -24,13 +23,36 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-clean-plugin</artifactId>
-				<version>3.2.0</version>
+				<version>3.0.0</version>
 			</plugin>
 			<plugin>
 				<groupId>org.mule.tools.maven</groupId>
 				<artifactId>mule-maven-plugin</artifactId>
 				<version>${mule.maven.plugin.version}</version>
 				<extensions>true</extensions>
+				<configuration>
+					<cloudHubDeployment>
+						<uri>https://anypoint.mulesoft.com</uri>
+						<businessGroupId>${anypoint.organizationId}</businessGroupId>
+						<muleVersion>${app.runtime}</muleVersion>
+						<username>${anypoint.username}</username>
+						<password>${anypoint.password}</password>
+						<applicationName>${app.name}</applicationName>
+						<environment>${anypoint.env}</environment>
+						<workerType>${anypoint.workerType}</workerType>
+						<region>${anypoint.region}</region>
+						<workers>${anypoint.workers}</workers>
+						<objectStoreV2>${anypoint.useObjectStoreV2}</objectStoreV2>
+						<!-- Start: SECURED PROPERTIES CI/CD -->
+						<properties>
+							<vault.key>${decryption.key}</vault.key>
+							<anypoint.platform.client_id>${anypoint.platform.client_id}</anypoint.platform.client_id>
+							<anypoint.platform.client_secret>${anypoint.platform.client_secret}</anypoint.platform.client_secret>
+						</properties>
+						<!-- End: SECURED PROPERTIES CI/CD -->
+					</cloudHubDeployment>
+					<classifier>mule-application</classifier>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
@@ -54,15 +76,32 @@
 			<version>1.9.2</version>
 			<classifier>mule-plugin</classifier>
 		</dependency>
-		
 		<dependency>
 			<groupId>com.itsnooge</groupId>
 			<artifactId>common-standard-library</artifactId>
 			<version>${common-standard-library.version}</version>
 			<classifier>mule-plugin</classifier>
 		</dependency>
+		<dependency>
+			<groupId>org.mule.modules</groupId>
+			<artifactId>mule-validation-module</artifactId>
+			<version>2.0.5</version>
+			<classifier>mule-plugin</classifier>
+		</dependency>
+		<dependency>
+			<groupId>com.mulesoft.connectors</groupId>
+			<artifactId>mule-amazon-dynamodb-connector</artifactId>
+			<version>1.5.1</version>
+			<classifier>mule-plugin</classifier>
+		</dependency>
+		<dependency>
+			<groupId>com.mulesoft.modules</groupId>
+			<artifactId>mule-secure-configuration-property-module</artifactId>
+			<version>1.2.6</version>
+			<classifier>mule-plugin</classifier>
+		</dependency>
 	</dependencies>
-
+	
 	<repositories>
 		<repository>
 			<id>anypoint-exchange-v3</id>
@@ -75,6 +114,11 @@
 			<name>MuleSoft Releases Repository</name>
 			<url>https://repository.mulesoft.org/releases/</url>
 			<layout>default</layout>
+		</repository>
+		<repository>
+			<id>github</id>
+			<name>GitHub mat-piotrowski Apache Maven Packages</name>
+			<url>https://maven.pkg.github.com/mat-piotrowski-mulesoft/maven-repository</url>
 		</repository>
 	</repositories>
 
@@ -89,10 +133,10 @@
 			</snapshots>
 		</pluginRepository>
 		<pluginRepository>
-	    	<id>github</id>
-	     	<name>GitHub mat-piotrowski Apache Maven Packages</name>
-	     	<url>https://maven.pkg.github.com/mat-piotrowski-mulesoft/maven-repository</url>
-	   </pluginRepository>
+			<id>github</id>
+			<name>GitHub mat-piotrowski Apache Maven Packages</name>
+			<url>https://maven.pkg.github.com/mat-piotrowski-mulesoft/maven-repository</url>
+		</pluginRepository>
 	</pluginRepositories>
 
 </project>

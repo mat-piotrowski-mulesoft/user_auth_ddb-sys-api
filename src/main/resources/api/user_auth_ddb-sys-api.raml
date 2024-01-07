@@ -1,0 +1,78 @@
+#%RAML 1.0
+title: user_auth_ddb-sys-api
+description: API connected with AWS Dynamo DB to authorize users
+
+version: v1
+baseUri: /api/v1/auth/credentials
+protocols:
+  - HTTPS
+
+traits:
+  errors: !include exchange_modules/46a3d09d-1bf1-4bb2-8902-b31080f34dab/error-response-trait/1.0.0/error-response-trait.raml
+
+types:
+  signup_credentials: !include types/signup_credentials_type.raml
+  signin_credentials: !include types/signin_credentials_type.raml
+  auth_response: !include types/succesfull_auth_response_type.raml
+  refresh_token: !include types/refresh_token_body_type.raml
+  signout_body: !include types/signout_body_type.raml
+
+/signup:
+  post:
+    description: Create user credentials in database and return auth token
+    is:
+      - errors
+    body:
+      application/json:
+        type: signup_credentials
+        example: !include examples/signup_credentials_example.raml
+    responses:
+      201:
+        body:
+          application/json:
+            type: auth_response
+            example: !include examples/succesfull_auth_response_example.raml
+
+/signin:
+  post:
+    description: Authorize user by sent credentials
+    is:
+      - errors
+    body:
+      application/json:
+        type: signin_credentials
+        example: !include examples/signin_credentials_example.raml
+    responses:
+      200:
+        body:
+          application/json:
+            type: auth_response
+            example: !include examples/succesfull_auth_response_example.raml
+
+/signout:
+  post:
+    description: Remove refresh token from the database
+    is:
+      - errors
+    body:
+      application/json:
+        type: signout_body
+        example: !include examples/signout_body_example.raml
+    responses:
+      204:
+
+/refresh:
+  post:
+    description: Get new access token by sending refresh token
+    is:
+      - errors
+    body:
+      application/json:
+        type: refresh_token
+        example: !include examples/refresh_token_body_example.raml
+    responses:
+      201:
+        body:
+          application/json:
+            type: auth_response
+            example: !include examples/succesfull_auth_response_example.raml

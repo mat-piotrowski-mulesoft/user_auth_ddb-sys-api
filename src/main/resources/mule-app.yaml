@@ -1,10 +1,35 @@
 api:
-  layer: "API_LAYER -> S - system, P - process, E - experience"
+  layer: "S"
   error:
-    code: "API_ERROR_CODE"
+    code: "DDBAUTH"
+  instanceId: "19218052"
 
-# Properties used with pagination module
-pagination:
-  limit:
-    default: "PAGINATION_LIMIT_DEFAULT_VALUE"
-    max: "PAGINATION_LIMIT_MAXIMUM_VALUE"
+jks:
+  path: "tls/itsnooge-cms-keys.jks"
+  alias: "mule_itsnooge_cms_rs256"
+  
+https:
+  host: "0.0.0.0"
+  port: "8082"
+  timeout: "30000"
+
+jwt:
+  alg: 
+    tokenHeader: "HS256"
+    dwlScript: "HmacSHA256"
+  typ: "JWT"
+  accessToken:
+    type: "access_token"
+    duration: "3600" # 1 hour
+  refreshToken:
+    type: "refresh_token"
+    duration: "604800" # 7 days
+    
+password:
+  alg:
+    dwlScript: "HmacSHA256"
+    
+aws:
+  region: "EU_CENTRAL_1"
+  tables:
+    auth: "DEV-itsnooge_cms-auth-table"
