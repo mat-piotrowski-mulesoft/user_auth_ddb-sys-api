@@ -63,10 +63,12 @@ jobs:
         USERNAME: ${{ secrets.anypoint_platform_username }}
         PASSWORD: ${{ secrets.anypoint_platform_password }}
         KEY: ${{ secrets.decryption_key }}
+        ORG_ID: ${{ secrets.anypoint_organization_id }}
       run: |
         artifactName=$(ls *.jar | head -1)
         mvn deploy -DskipMunitTests -DmuleDeploy \
-         -Dapp.name="user-auth-ddb-sys-api"
+         -Dapp.name="user-auth-ddb-sys-api" \
+         -Danypoint.organizationId=""
          -Danypoint.env="DEV" \
          -Danypoint.username="$USERNAME" \
          -Danypoint.password="$PASSWORD" \
