@@ -2,11 +2,16 @@ api:
   layer: "S"
   error:
     code: "DDBAUTH"
-  instanceId: "19217525"
+  instanceId: "19218052"
 
 jks:
   path: "tls/itsnooge-cms-keys.jks"
   alias: "mule_itsnooge_cms_rs256"
+  
+https:
+  host: "0.0.0.0"
+  port: "8082"
+  timeout: "30000"
 
 jwt:
   alg: 

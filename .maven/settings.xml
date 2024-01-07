@@ -41,14 +41,7 @@
           <snapshots>
             <enabled>true</enabled>
           </snapshots>
-        </repository> 
-
-        <repository>
-            <id>anypoint-exchange-v3</id>
-            <name>Exchange Repository</name>
-            <url>https://maven.anypoint.mulesoft.com/api/v3/organizations/${anypoint.organizationId}/maven</url>
-            <layout>default</layout>
-        </repository>		
+        </repository>
       </repositories>
     </profile>
 	

@@ -1,4 +1,12 @@
 {
   "minMuleVersion": "4.5.0",
-  "secureProperties": ["jwt.secret", "aws.secretKey", "aws.accesKey", "password.secret", "vault.key"]
+  "secureProperties": [
+  	"jwt.secret",
+  	"aws.secretKey",
+  	"aws.accesKey",
+  	"password.secret",
+  	"vault.key",
+  	"anypoint.platform.client_id",
+  	"anypoint.platform.client_secret"
+  	]
 }
