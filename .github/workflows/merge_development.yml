@@ -68,7 +68,7 @@ jobs:
         artifactName=$(ls *.jar | head -1)
         mvn deploy -DskipMunitTests -DmuleDeploy \
          -Dapp.name="user-auth-ddb-sys-api" \
-         -Danypoint.organizationId=""
+         -Danypoint.organizationId="$ORG_ID"
          -Danypoint.env="DEV" \
          -Danypoint.username="$USERNAME" \
          -Danypoint.password="$PASSWORD" \
