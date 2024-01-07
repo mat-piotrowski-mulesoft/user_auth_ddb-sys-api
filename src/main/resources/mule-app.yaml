@@ -18,7 +18,6 @@ jwt:
     tokenHeader: "HS256"
     dwlScript: "HmacSHA256"
   typ: "JWT"
-  kid: "mule_itsnooge_cms_rs256"
   accessToken:
     type: "access_token"
     duration: "3600" # 1 hour

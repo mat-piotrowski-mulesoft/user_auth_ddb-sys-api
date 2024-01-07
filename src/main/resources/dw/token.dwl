@@ -14,8 +14,7 @@ fun generateJWT(iss, sub, tokenType, duration) = do {
  
 	var tokenHeader = {
 	 alg: Mule::p("jwt.alg.tokenHeader"),
-	 typ: Mule::p("jwt.typ"),
-	 kid: Mule::p("jwt.kid")
+	 typ: Mule::p("jwt.typ")
 	}
  
 	var tokenPayload = {
