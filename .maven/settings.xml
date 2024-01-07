@@ -11,6 +11,11 @@
       <username>${nexus_username}</username>
       <password>${nexus_password}</password>
     </server>
+ 	<server>
+        <id>anypoint-exchange-v3</id>
+        <username>${nexus_username}</username>
+        <password>${nexus_password}</password>
+    </server>
 	<server>
       <id>github</id>
       <username>mat-piotrowski</username>
@@ -36,7 +41,14 @@
           <snapshots>
             <enabled>true</enabled>
           </snapshots>
-        </repository>     
+        </repository> 
+
+        <repository>
+            <id>anypoint-exchange-v3</id>
+            <name>Exchange Repository</name>
+            <url>https://maven.anypoint.mulesoft.com/api/v3/organizations/${anypoint.organizationId}/maven</url>
+            <layout>default</layout>
+        </repository>		
       </repositories>
     </profile>
 	
