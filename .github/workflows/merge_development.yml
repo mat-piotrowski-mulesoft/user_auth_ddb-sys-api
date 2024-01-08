@@ -58,17 +58,17 @@ jobs:
         name: artifacts
     - name: Deploy to DEV
       env:
-        APP_NAME: ${{ variables.app_name }}
+        APP_NAME: ${{ vars.app_name }}
         USERNAME: ${{ secrets.anypoint_platform_username }}
         PASSWORD: ${{ secrets.anypoint_platform_password }}
         KEY: ${{ secrets.decryption_key }}
         ORG_ID: ${{ secrets.anypoint_organization_id }}
         AP_CLIENT_ID: ${{ secrets.anypoint_platform_client_id }}
         AP_CLIENT_SECRET: ${{ secrets.anypoint_platform_client_secret }}
-        WORKER_TYPE: ${{ variables.anypoint_worker_type }}
-        REGION: ${{ variables.anypoint_region }}
-        WORKERS_NUMBER: ${{ variables.anypoint_workers_number }}
-        OS2: ${{ variables.anypoint_os2_enabled }}
+        WORKER_TYPE: ${{ vars.anypoint_worker_type }}
+        REGION: ${{ vars.anypoint_region }}
+        WORKERS_NUMBER: ${{ vars.anypoint_workers_number }}
+        OS2: ${{ vars.anypoint_os2_enabled }}
         AP_ENV: "DEV"
       run: |
         artifactName=$(ls *.jar | head -1)
