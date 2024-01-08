@@ -19,6 +19,10 @@ payload.email_address]]></ee:set-variable>
 		<validation:is-email doc:name="Input email validation" doc:id="ca1ceb70-3d5f-4218-b3a3-571c0e96712d" email="#[vars.emailAddress]" message="DDBAUTH-S-00001">
 			<error-mapping targetType="APP:EXCEPTION_HANDLING" />
 		</validation:is-email>
+		<flow-ref doc:name="Ref to aws_dd:check-if-user-exists-subflow" doc:id="50937f93-1ebc-4298-8469-fe77e30f542c" name="aws_dd:check-if-user-exists-subflow"/>
+		<validation:is-true doc:name="Is user exists in DB" doc:id="42059679-b913-4757-97a9-27ff65688827" message="DDBAUTH-S-00007" expression="#[vars.isUserExists]">
+			<error-mapping targetType="APP:EXCEPTION_HANDLING" />
+		</validation:is-true>
 		<ee:transform doc:name="Set new rt" doc:id="97562cb0-f03e-4ccd-b56e-51872a4feb32" >
 			<ee:message >
 			</ee:message>
