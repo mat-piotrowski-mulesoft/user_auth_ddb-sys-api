@@ -3,8 +3,6 @@ name: Build and Deploy to DEV
 on:
   push:
     branches: [ development ]
-  pull_request:
-    branches: [ development ]
     
 jobs:
   build:
@@ -60,24 +58,29 @@ jobs:
         name: artifacts
     - name: Deploy to DEV
       env:
+        APP_NAME: ${{ env.app_name }}
         USERNAME: ${{ secrets.anypoint_platform_username }}
         PASSWORD: ${{ secrets.anypoint_platform_password }}
         KEY: ${{ secrets.decryption_key }}
         ORG_ID: ${{ secrets.anypoint_organization_id }}
         AP_CLIENT_ID: ${{ secrets.anypoint_platform_client_id }}
         AP_CLIENT_SECRET: ${{ secrets.anypoint_platform_client_secret }}
+        WORKER_TYPE: ${{ env.anypoint_worker_type }}
+        WORKERS_NUMBER: ${{ env.anypoint_workers_number }}
+        REGION: ${{ env.anypoint_region }}
+        OS2: ${{ env.anypoint_os2_enabled }}
       run: |
         artifactName=$(ls *.jar | head -1)
         mvn deploy -DskipMunitTests -DmuleDeploy \
-         -Dapp.name="user-auth-ddb-sys-api" \
+         -Dapp.name="$APP_NAME" \
          -Danypoint.organizationId="$ORG_ID" \
          -Danypoint.platform.client_id="$AP_CLIENT_ID" \
          -Danypoint.platform.client_secret="$AP_CLIENT_SECRET" \
          -Danypoint.env="DEV" \
          -Danypoint.username="$USERNAME" \
          -Danypoint.password="$PASSWORD" \
-         -Danypoint.workerType="MICRO" \
-         -Danypoint.region="us-east-2" \
-         -Danypoint.workers="1" \
-         -Danypoint.useObjectStoreV2="true" \
+         -Danypoint.workerType="$WORKER_TYPE" \
+         -Danypoint.region="$REGION" \
+         -Danypoint.workers="$WORKERS_NUMBER" \
+         -Danypoint.useObjectStoreV2="$OS2" \
          -Ddecryption.key="$KEY"
