@@ -58,17 +58,18 @@ jobs:
         name: artifacts
     - name: Deploy to DEV
       env:
-        APP_NAME: ${{ env.app_name }}
+        APP_NAME: ${{ secrets.app_name }}
         USERNAME: ${{ secrets.anypoint_platform_username }}
         PASSWORD: ${{ secrets.anypoint_platform_password }}
         KEY: ${{ secrets.decryption_key }}
         ORG_ID: ${{ secrets.anypoint_organization_id }}
         AP_CLIENT_ID: ${{ secrets.anypoint_platform_client_id }}
         AP_CLIENT_SECRET: ${{ secrets.anypoint_platform_client_secret }}
-        WORKER_TYPE: ${{ env.anypoint_worker_type }}
-        WORKERS_NUMBER: ${{ env.anypoint_workers_number }}
-        REGION: ${{ env.anypoint_region }}
-        OS2: ${{ env.anypoint_os2_enabled }}
+        WORKER_TYPE: ${{ secrets.anypoint_worker_type }}
+        REGION: ${{ secrets.anypoint_region }}
+        WORKERS_NUMBER: ${{ secrets.anypoint_workers_number }}
+        OS2: ${{ secrets.anypoint_os2_enabled }}
+        AP_ENV: "DEV"
       run: |
         artifactName=$(ls *.jar | head -1)
         mvn deploy -DskipMunitTests -DmuleDeploy \
@@ -76,7 +77,7 @@ jobs:
          -Danypoint.organizationId="$ORG_ID" \
          -Danypoint.platform.client_id="$AP_CLIENT_ID" \
          -Danypoint.platform.client_secret="$AP_CLIENT_SECRET" \
-         -Danypoint.env="DEV" \
+         -Danypoint.env="$AP_ENV" \
          -Danypoint.username="$USERNAME" \
          -Danypoint.password="$PASSWORD" \
          -Danypoint.workerType="$WORKER_TYPE" \
