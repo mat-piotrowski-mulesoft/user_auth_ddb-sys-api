@@ -14,9 +14,7 @@ https:
   timeout: "30000"
 
 jwt:
-  alg: 
-    tokenHeader: "HS256"
-    dwlScript: "HmacSHA256"
+  alg: "HmacSHA256"
   typ: "JWT"
   accessToken:
     type: "access_token"

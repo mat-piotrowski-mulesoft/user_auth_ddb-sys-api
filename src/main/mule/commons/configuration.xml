@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway"
-	xmlns:tls="http://www.mulesoft.org/schema/mule/tls"
-	xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties" xmlns:dynamodb="http://www.mulesoft.org/schema/mule/dynamodb"
-	xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit"
-	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+<mule xmlns:module-jwt-connector="http://www.mulesoft.org/schema/mule/module-jwt-connector"
+	xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway"
+	xmlns:tls="http://www.mulesoft.org/schema/mule/tls" xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties"
+	xmlns:dynamodb="http://www.mulesoft.org/schema/mule/dynamodb"
+	xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
 http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd 
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/dynamodb http://www.mulesoft.org/schema/mule/dynamodb/current/mule-dynamodb.xsd
 http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/schema/mule/secure-properties/current/mule-secure-properties.xsd
 http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd
-http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd">
+http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd
+http://www.mulesoft.org/schema/mule/module-jwt-connector http://www.mulesoft.org/schema/mule/module-jwt-connector/current/mule-module-jwt-connector.xsd">
 
 	<http:listener-config name="httpListenerConfig">
         <http:listener-connection host="${https.host}" port="${https.port}" readTimeout="${https.timeout}" tlsContext="TLS_Context" protocol="HTTPS"/>
@@ -28,6 +29,8 @@ http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/m
 	</tls:context>
 	
 	<import doc:name="Import error-handling" doc:id="117397e4-1675-49b5-9fd2-ce46b256d4f8" file="error-handling.xml" />
+	
+	<module-jwt-connector:config name="JWT_Config" doc:name="JWT Config" doc:id="171a13d9-9416-43eb-a0fb-39be153f7c2a" accessTokenType="${jwt.accessToken.type}" accessTokenDuration="${jwt.accessToken.duration}" refreshTokenType="${jwt.refreshToken.type}" refreshTokenDuration="${jwt.refreshToken.duration}" jwtSecret="${secure::jwt.secret}" tokenType="${jwt.typ}" tokenAlg="${jwt.alg}" />
 	
 	<dynamodb:config name="Amazon_DynamoDB_Configuration" doc:name="Amazon DynamoDB Configuration" doc:id="2b5a6c0c-ee16-4f6c-9485-3530955f19c5" >
 		<dynamodb:basic-connection accessKey="${secure::aws.accessKey}" secretKey="${secure::aws.secretKey}" region="${aws.region}" />
