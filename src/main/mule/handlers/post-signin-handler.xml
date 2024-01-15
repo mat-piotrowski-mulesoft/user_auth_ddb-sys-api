@@ -20,11 +20,8 @@ output application/java
 payload.email_address]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
-		<validation:is-email doc:name="Input email validation" doc:id="fd8155e0-26ab-4994-9fe3-bb977de655bd" email="#[vars.emailAddress]" message="DDBAUTH-S-00001" >
-			<error-mapping targetType="APP:EXCEPTION_HANDLING" />
-		</validation:is-email>
 		<flow-ref doc:name="Ref to aws_dd:get-user-password-subflow" doc:id="df675c27-6a8d-4e3e-b81b-9f4b2b7d61c6" name="aws_dd:get-user-password-subflow"/>
-		<validation:is-not-null doc:name="Is user exists" doc:id="202815ae-b3e5-441f-80a2-8fdc91a18141" value="#[vars.receivedPassword]" message="DDBAUTH-S-00007">
+		<validation:is-not-null doc:name="Is user exists" doc:id="202815ae-b3e5-441f-80a2-8fdc91a18141" value="#[vars.receivedPassword]" message="DDBAUTH-S-00003">
 			<error-mapping targetType="APP:EXCEPTION_HANDLING" />
 		</validation:is-not-null>
 		<ee:transform doc:name="Compare paswords" doc:id="d3181007-c9a5-447c-980c-876899bf33b2" >
@@ -39,7 +36,7 @@ import comparePasswords from dw::auth
 comparePasswords(vars.receivedPassword, vars.password)]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
-		<validation:is-true doc:name="Password validation" doc:id="bcd07e0e-a529-421c-9d93-075d60368424" message="DDBAUTH-S-00008" expression="#[vars.isPasswordMatch]">
+		<validation:is-true doc:name="Password validation" doc:id="bcd07e0e-a529-421c-9d93-075d60368424" message="DDBAUTH-S-00005" expression="#[vars.isPasswordMatch]">
 			<error-mapping targetType="APP:EXCEPTION_HANDLING" />
 		</validation:is-true>
 		<flow-ref doc:name="Ref to jwt-generator-orchestrator-subflow" doc:id="5171a549-f1c5-4cb2-9d85-2c6e2ff114ae" name="jwt-generator-orchestrator-subflow" />
@@ -53,7 +50,7 @@ vars.tokens.refreshToken]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
 		<flow-ref doc:name="Ref to aws_dd:update_user_rt-subflow" doc:id="31f8a2ae-e935-4f95-a355-36fe424dbd13" name="aws_dd:update_user_rt-subflow"/>
-		<validation:is-true doc:name="Refresh token validation" doc:id="9ae5691f-57e1-4e3f-9f22-3fd8c1b32f3f" expression="#[vars.refreshToken == vars.newRefreshToken]" message="DDBAUTH-S-00009">
+		<validation:is-true doc:name="Refresh token validation" doc:id="9ae5691f-57e1-4e3f-9f22-3fd8c1b32f3f" expression="#[vars.refreshToken == vars.newRefreshToken]" message="DDBAUTH-S-00006">
 			<error-mapping targetType="APP:EXCEPTION_HANDLING" />
 		</validation:is-true>
 		<ee:transform doc:name="Set response" doc:id="efaf0a80-5a33-4a5a-bfd0-7bd8aa17e083" >

@@ -1,74 +1,50 @@
 {
-  "DDBAUTH-S-00001": {
+ "DDBAUTH-S-00001": {
     "code": "DDBAUTH-S-00001",
-    "message": "Bad Request",
-    "description": "Incorrect format of the email address",
-    "responseCode": 400
-  },
-  "DDBAUTH-S-00002": {
-    "code": "DDBAUTH-S-00002",
-    "message": "Bad Request",
-    "description": "Incorrect format of the phone number, it should have country code, space and the phone number",
-    "responseCode": 400
-  },
-   "DDBAUTH-S-00003": {
-    "code": "DDBAUTH-S-00003",
     "message": "Unauthorizied",
     "description": "User is signed out, it is necessary to sign in again",
     "responseCode": 401
   },
-   "DDBAUTH-S-00004": {
-    "code": "DDBAUTH-S-00004",
-    "message": "Bad Request",
-    "description": "Incorrect password format, it should have at least 8 characters, at least one lowercase letter, one uppercase letter and one number",
-    "responseCode": 400
-  },
-    "DDBAUTH-S-00005": {
-     "code": "DDBAUTH-S-00005",
+  "DDBAUTH-S-00002": {
+     "code": "DDBAUTH-S-00002",
      "message": "Bad Request",
      "description": "User with provided email address is already exists",
      "responseCode": 400
   },
-   	"DDBAUTH-S-00006": {
-     "code": "DDBAUTH-S-00006",
-     "message": "Internal Server Error",
-     "description": "There was problem when trying to sign out, try again",
-     "responseCode": 500
-  },
-  "DDBAUTH-S-00007": {
-     "code": "DDBAUTH-S-00007",
+  "DDBAUTH-S-00003": {
+     "code": "DDBAUTH-S-00003",
      "message": "Bad Request",
      "description": "User with provided email address is not exists",
      "responseCode": 400
   },
-  "DDBAUTH-S-00008": {
-     "code": "DDBAUTH-S-00008",
+  "DDBAUTH-S-00004": {
+     "code": "DDBAUTH-S-00004",
+     "message": "Internal Server Error",
+     "description": "There was problem when trying to sign out, try again",
+     "responseCode": 500
+  },
+  "DDBAUTH-S-00005": {
+     "code": "DDBAUTH-S-00005",
      "message": "Bad Request",
-     "description": "Password doesn't match",
+     "description": "Password does not match",
      "responseCode": 400
   },
-  "DDBAUTH-S-00009": {
-     "code": "DDBAUTH-S-00009",
+  "DDBAUTH-S-00006": {
+     "code": "DDBAUTH-S-00006",
      "message": "Internal Server Error",
      "description": "There was problem when trying to sign in, try again",
      "responseCode": 500
   },
-    "DDBAUTH-S-00010": {
-     "code": "DDBAUTH-S-00010",
+  "DDBAUTH-S-00007": {
+     "code": "DDBAUTH-S-00007",
      "message": "Unauthorizied",
-     "description": "Token doesn't have a valid signature",
+     "description": "Token does not match to the stored one",
      "responseCode": 401
   },
-  "DDBAUTH-S-00011": {
-     "code": "DDBAUTH-S-00011",
-     "message": "Unauthorizied",
-     "description": "Token doesn't match to the stored one",
-     "responseCode": 401
-  },
-  "DDBAUTH-S-00012": {
-     "code": "DDBAUTH-S-00012",
+  "DDBAUTH-S-00008": {
+     "code": "DDBAUTH-S-00008",
      "message": "Internal Server Error",
-     "description": "There was problem when trying to refresh token, try again",
+     "description": "There was problem when trying to make change with the token, try again",
      "responseCode": 500
   }
 }

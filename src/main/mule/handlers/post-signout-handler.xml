@@ -16,11 +16,8 @@ output application/java
 payload.email_address]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
-		<validation:is-email doc:name="Input email validation" doc:id="ca1ceb70-3d5f-4218-b3a3-571c0e96712d" email="#[vars.emailAddress]" message="DDBAUTH-S-00001">
-			<error-mapping targetType="APP:EXCEPTION_HANDLING" />
-		</validation:is-email>
 		<flow-ref doc:name="Ref to aws_dd:check-if-user-exists-subflow" doc:id="50937f93-1ebc-4298-8469-fe77e30f542c" name="aws_dd:check-if-user-exists-subflow"/>
-		<validation:is-true doc:name="Is user exists in DB" doc:id="42059679-b913-4757-97a9-27ff65688827" message="DDBAUTH-S-00007" expression="#[vars.isUserExists]">
+		<validation:is-true doc:name="Is user exists in DB" doc:id="42059679-b913-4757-97a9-27ff65688827" message="DDBAUTH-S-00003" expression="#[vars.isUserExists]">
 			<error-mapping targetType="APP:EXCEPTION_HANDLING" />
 		</validation:is-true>
 		<ee:transform doc:name="Set new rt" doc:id="97562cb0-f03e-4ccd-b56e-51872a4feb32" >
@@ -34,7 +31,7 @@ output application/java
 			</ee:variables>
 		</ee:transform>
 		<flow-ref doc:name="Ref to aws_dd:update_user_rt-subflow" doc:id="b9abd095-f778-48c8-92d3-1f88c40da496" name="aws_dd:update_user_rt-subflow"/>
-		<validation:is-true doc:name="Refresh token validation" doc:id="408e2975-60c3-44bd-8aef-9398ad2c182e" expression="#[vars.refreshToken == vars.newRefreshToken]" message="DDBAUTH-S-00006">
+		<validation:is-true doc:name="Refresh token validation" doc:id="408e2975-60c3-44bd-8aef-9398ad2c182e" expression="#[vars.refreshToken == vars.newRefreshToken]" message="DDBAUTH-S-00004">
 			<error-mapping targetType="APP:EXCEPTION_HANDLING" />
 		</validation:is-true>
 		<ee:transform doc:name="Set response" doc:id="9cc6b191-d85d-466d-8a03-c9d1f10b0e77" >
