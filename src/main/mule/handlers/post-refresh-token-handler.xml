@@ -20,14 +20,11 @@ output application/java
 payload.email_address]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
-		<validation:is-email doc:name="Input email validation" doc:id="03e0ab5a-9f9f-4395-8eb0-60538e216d77" email="#[vars.emailAddress]" message="DDBAUTH-S-00001">
-			<error-mapping targetType="APP:EXCEPTION_HANDLING" />
-		</validation:is-email>
 		<flow-ref doc:name="Ref to aws_dd:get-user-refresh-token-subflow" doc:id="edbe544e-468c-4d24-ad4e-d658158b2caa" name="aws_dd:get-user-refresh-token-subflow"/>
-		<validation:is-not-blank-string doc:name="Is token not empty string" doc:id="c60eefda-d4cf-462e-aa5a-7cd3ac7692e9" value="#[vars.receivedRefreshToken]" message="DDBAUTH-S-00003">
+		<validation:is-not-blank-string doc:name="Is token not empty string" doc:id="c60eefda-d4cf-462e-aa5a-7cd3ac7692e9" value="#[vars.receivedRefreshToken]" message="DDBAUTH-S-00001">
 			<error-mapping targetType="APP:EXCEPTION_HANDLING" />
 		</validation:is-not-blank-string>
-		<validation:is-true doc:name="Is token equal" doc:id="a911aa63-cbc9-4ae8-a869-34579b48a469" expression="#[vars.receivedRefreshToken == vars.token]" message="DDBAUTH-S-00011">
+		<validation:is-true doc:name="Is token equal" doc:id="a911aa63-cbc9-4ae8-a869-34579b48a469" expression="#[vars.receivedRefreshToken == vars.token]" message="DDBAUTH-S-00007">
 			<error-mapping targetType="APP:EXCEPTION_HANDLING" />
 		</validation:is-true>
 		<flow-ref doc:name="Ref to jwt-generator-orchestrator-subflow" doc:id="f1154703-390f-42d8-9221-ca4845b770eb" name="jwt-generator-orchestrator-subflow" />
@@ -41,7 +38,7 @@ vars.tokens.refreshToken]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
 		<flow-ref doc:name="Ref to aws_dd:update_user_rt-subflow" doc:id="504be968-6369-45c6-9ad5-01dfe2899ce0" name="aws_dd:update_user_rt-subflow"/>
-		<validation:is-true doc:name="Refresh token validation" doc:id="adf6fd17-f228-4ba4-a833-52639ded7c27" expression="#[vars.refreshToken == vars.newRefreshToken]" message="DDBAUTH-S-00012">
+		<validation:is-true doc:name="Refresh token validation" doc:id="adf6fd17-f228-4ba4-a833-52639ded7c27" expression="#[vars.refreshToken == vars.newRefreshToken]" message="DDBAUTH-S-00008">
 			<error-mapping targetType="APP:EXCEPTION_HANDLING" />
 		</validation:is-true>
 		<ee:transform doc:name="Set response" doc:id="3c0d96db-ec5d-47f5-8f08-06d4be452f1c" >
