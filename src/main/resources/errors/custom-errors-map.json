@@ -25,9 +25,9 @@
   },
   "DDBAUTH-S-00005": {
      "code": "DDBAUTH-S-00005",
-     "message": "Bad Request",
+     "message": "Unauthorizied",
      "description": "Password does not match",
-     "responseCode": 400
+     "responseCode": 401
   },
   "DDBAUTH-S-00006": {
      "code": "DDBAUTH-S-00006",
