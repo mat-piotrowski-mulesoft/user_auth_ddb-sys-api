@@ -51,6 +51,9 @@ var timestamp = now() as Number
 	email_address: {
 		S: vars.emailAddress
 	},
+	user_id: {
+		S: vars.userId
+	},
 	password: {
 		S: vars.hashedPassword
 	},
@@ -106,7 +109,7 @@ payload.attributes.rt.S]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
 	</sub-flow>
-	<sub-flow name="aws_dd:get-user-password-subflow" doc:id="e75ebab9-b805-40cd-a3d0-88fff5b83933" >
+	<sub-flow name="aws_dd:get-user-id-and-password-subflow" doc:id="e75ebab9-b805-40cd-a3d0-88fff5b83933" >
 		<ee:transform doc:name="Set key" doc:id="4e61dbcb-4c88-4499-9d2e-9589f6ae97bd" >
 			<ee:message />
 			<ee:variables >
@@ -120,23 +123,28 @@ output application/json
 }]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
-		<dynamodb:get-item tableName="${aws.tables.auth}" doc:name="Get password" doc:id="4e06b543-19e1-4a12-8109-b678a29aa582" config-ref="Amazon_DynamoDB_Configuration" >
+		<dynamodb:get-item tableName="${aws.tables.auth}" doc:name="Get password and user_id" doc:id="4e06b543-19e1-4a12-8109-b678a29aa582" config-ref="Amazon_DynamoDB_Configuration" >
 			<dynamodb:key ><![CDATA[#[vars.awsGetKey]]]></dynamodb:key>
 			<dynamodb:attributes-to-gets >
 				<dynamodb:attributes-to-get value="password" />
+				<dynamodb:attributes-to-get value="user_id" />
 			</dynamodb:attributes-to-gets>
 		</dynamodb:get-item>
-		<ee:transform doc:name="Save received password" doc:id="557bc3f9-142b-49ed-b5fe-a4c0a824a51f" >
+		<ee:transform doc:name="Save response" doc:id="557bc3f9-142b-49ed-b5fe-a4c0a824a51f" >
 			<ee:message />
 			<ee:variables >
 				<ee:set-variable variableName="receivedPassword" ><![CDATA[%dw 2.0
 output application/java
 ---
 payload.item.password.S]]></ee:set-variable>
+				<ee:set-variable variableName="userId" ><![CDATA[%dw 2.0
+output application/java
+---
+payload.item.user_id.S]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
 	</sub-flow>
-	<sub-flow name="aws_dd:get-user-refresh-token-subflow" doc:id="6084b5e8-faf0-47a8-b54b-d0628b038e5e" >
+	<sub-flow name="aws_dd:get-refresh-token-data-subflow" doc:id="6084b5e8-faf0-47a8-b54b-d0628b038e5e" >
 		<ee:transform doc:name="Set key" doc:id="d9bdfd80-6d01-4c48-ba97-273c6b3e28d4" >
 			<ee:message />
 			<ee:variables >
@@ -150,19 +158,30 @@ output application/json
 }]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
-		<dynamodb:get-item tableName="${aws.tables.auth}" doc:name="Get refresh token" doc:id="74363274-4a24-42aa-a29e-bf83d28607cd" config-ref="Amazon_DynamoDB_Configuration" >
+		<dynamodb:get-item tableName="${aws.tables.auth}" doc:name="Get refresh token and email address" doc:id="74363274-4a24-42aa-a29e-bf83d28607cd" config-ref="Amazon_DynamoDB_Configuration" >
 			<dynamodb:key ><![CDATA[#[vars.awsGetKey]]]></dynamodb:key>
 			<dynamodb:attributes-to-gets >
 				<dynamodb:attributes-to-get value="rt" />
+				<dynamodb:attributes-to-get value="email_address" />
 			</dynamodb:attributes-to-gets>
 		</dynamodb:get-item>
-		<ee:transform doc:name="Save received token" doc:id="37299c2f-1428-48ca-b920-77cd7e532d39" >
+		<ee:transform doc:name="Save  response" doc:id="37299c2f-1428-48ca-b920-77cd7e532d39" >
 			<ee:message />
 			<ee:variables >
 				<ee:set-variable variableName="receivedRefreshToken" ><![CDATA[%dw 2.0
 output application/java
 ---
 payload.item.rt.S]]></ee:set-variable>
+				<ee:set-variable variableName="isUserExists" ><![CDATA[%dw 2.0
+output application/java
+
+//payload.item.rt.S
+---
+not isEmpty(payload.item)]]></ee:set-variable>
+				<ee:set-variable variableName="userId" ><![CDATA[%dw 2.0
+output application/java
+---
+payload.item.user_id.S]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
 	</sub-flow>
