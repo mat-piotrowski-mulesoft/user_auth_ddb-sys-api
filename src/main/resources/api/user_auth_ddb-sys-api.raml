@@ -8,7 +8,7 @@ protocols:
   - HTTPS
 
 uses: 
-  credentials-library: exchange_modules/46a3d09d-1bf1-4bb2-8902-b31080f34dab/auth-credentials-types-examples/1.0.0/auth-credentials-types-examples.raml
+  auth-data: exchange_modules/46a3d09d-1bf1-4bb2-8902-b31080f34dab/auth-data-model/1.0.2/auth-data-model.raml
   security-library: exchange_modules/46a3d09d-1bf1-4bb2-8902-b31080f34dab/security-library/1.0.3/security-library.raml
 
 traits:
@@ -23,12 +23,12 @@ traits:
       - security-library.client-id-sec-headers
     body:
       application/json:
-        type: credentials-library.signup_type
+        type: auth-data.signup-credentials
     responses:
       201:
         body:
           application/json:
-            type: credentials-library.succesfull_auth_response
+            type: auth-data.tokens-response
 
 /signin:
   post:
@@ -39,12 +39,12 @@ traits:
       - security-library.client-id-sec-headers
     body:
       application/json:
-        type: credentials-library.signin_type
+        type: auth-data.signin-credentials
     responses:
       200:
         body:
           application/json:
-            type: credentials-library.succesfull_auth_response
+            type: auth-data.tokens-response
 
 /signout:
   post:
@@ -54,7 +54,7 @@ traits:
       - security-library.client-id-sec-headers
     body:
       application/json:
-        type: credentials-library.email_address
+        type: auth-data.refresh-token-body
     responses:
       204:
 
@@ -67,9 +67,22 @@ traits:
       - security-library.client-id-sec-headers
     body:
       application/json:
-        type: credentials-library.refresh_token_body
+        type: auth-data.refresh-token-body
     responses:
       201:
         body:
           application/json:
-            type: credentials-library.succesfull_auth_response
+            type: auth-data.tokens-response
+
+/change-password:
+  post:
+    description: Update user password
+    is:
+      - errors
+      - security-library.iss-header
+      - security-library.client-id-sec-headers
+    body:
+      application/json:
+        type: auth-data.change-password-body
+    responses:
+      204:

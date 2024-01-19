@@ -20,7 +20,7 @@ output application/java
 payload.email_address]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
-		<flow-ref doc:name="Ref to aws_dd:get-user-password-subflow" doc:id="df675c27-6a8d-4e3e-b81b-9f4b2b7d61c6" name="aws_dd:get-user-password-subflow"/>
+		<flow-ref doc:name="Ref to aws_dd:get-user-password-subflow" doc:id="df675c27-6a8d-4e3e-b81b-9f4b2b7d61c6" name="aws_dd:get-user-id-and-password-subflow"/>
 		<validation:is-not-null doc:name="Is user exists" doc:id="202815ae-b3e5-441f-80a2-8fdc91a18141" value="#[vars.receivedPassword]" message="DDBAUTH-S-00003">
 			<error-mapping targetType="APP:EXCEPTION_HANDLING" />
 		</validation:is-not-null>

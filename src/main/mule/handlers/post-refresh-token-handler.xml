@@ -20,7 +20,7 @@ output application/java
 payload.email_address]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
-		<flow-ref doc:name="Ref to aws_dd:get-user-refresh-token-subflow" doc:id="edbe544e-468c-4d24-ad4e-d658158b2caa" name="aws_dd:get-user-refresh-token-subflow"/>
+		<flow-ref doc:name="Ref to aws_dd:get-refresh-token-data-subflow" doc:id="edbe544e-468c-4d24-ad4e-d658158b2caa" name="aws_dd:get-refresh-token-data-subflow"/>
 		<validation:is-not-blank-string doc:name="Is token not empty string" doc:id="c60eefda-d4cf-462e-aa5a-7cd3ac7692e9" value="#[vars.receivedRefreshToken]" message="DDBAUTH-S-00001">
 			<error-mapping targetType="APP:EXCEPTION_HANDLING" />
 		</validation:is-not-blank-string>

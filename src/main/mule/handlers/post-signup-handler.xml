@@ -24,6 +24,10 @@ payload.email_address]]></ee:set-variable>
 output application/java
 ---
 payload.phone_number replace (/\+|-/) with ""]]></ee:set-variable>
+				<ee:set-variable variableName="userId" ><![CDATA[%dw 2.0
+output application/java
+---
+payload.id]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
 		<ee:transform doc:name="Hash password" doc:id="788f8509-0e4f-4ab6-a7d2-56b31758fbf9" >
@@ -38,7 +42,7 @@ import hashPassword from dw::auth
 hashPassword(vars.password)]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
-		<flow-ref doc:name="Ref to aws_dd:check-if-user-exists-subflow" doc:id="058cabb5-0b13-4fcd-a4ed-6b224001b580" name="aws_dd:check-if-user-exists-subflow"/>
+		<flow-ref doc:name="Ref to aws_dd:check-if-user-exists-subflow" doc:id="5c957e01-eaab-43e1-8794-b9c901af1885" name="aws_dd:check-if-user-exists-subflow" />
 		<validation:is-false doc:name="Is user exists in DB" doc:id="03b1cc93-c44f-4890-b917-f4968bd1c25d" expression="#[vars.isUserExists]" message="DDBAUTH-S-00002">
 			<error-mapping targetType="APP:EXCEPTION_HANDLING" />
 		</validation:is-false>

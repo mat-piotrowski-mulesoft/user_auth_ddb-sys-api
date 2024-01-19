@@ -31,3 +31,6 @@ aws:
   region: "EU_CENTRAL_1"
   tables:
     auth: "DEV-itsnooge_cms-auth-table"
+    
+user_id:
+  allowed_types: "A,M,C"
